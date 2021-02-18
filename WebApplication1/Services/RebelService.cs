@@ -14,8 +14,7 @@ namespace WebApplication1.Services
         {
             try
             {
-                var json = GetRepository("Data/RebelsRepository.json");
-                return JsonConvert.DeserializeObject<IEnumerable<Rebel>>(json);
+                return JsonConvert.DeserializeObject<IEnumerable<Rebel>>(GetRepository("Data/RebelsRepository.json"));
             }
             catch (Exception ex)
             {
@@ -37,12 +36,19 @@ namespace WebApplication1.Services
             }
         }
 
-        public void AddRebel(RebelParams rebel)
+        public void AddRebel()
         {
             try
             {
-                var json = GetRepository("Data/RebelsRepository.json");
-                Rebel newRebel = new Rebel(rebel.Name, rebel.Planet);
+                var path = "Data/RebelsRepository.json";
+                var json = GetRepository(path);
+                var list = JsonConvert.DeserializeObject<List<Rebel>>(json);
+                list.Add(new Rebel("newRebel", "Earth"));
+
+                var jsonToOutput = JsonConvert.SerializeObject(list, Formatting.Indented);
+                saveList(jsonToOutput,path);
+
+
             }
             catch (Exception ex)
             {
@@ -51,6 +57,10 @@ namespace WebApplication1.Services
 
         }
 
+        private void saveList(string jsonToOutput, string path)
+        {
+            System.IO.File.WriteAllText(path, jsonToOutput);
+        }
 
         private string GetRepository(string path)
         {

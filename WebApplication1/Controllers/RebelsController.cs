@@ -65,20 +65,15 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update([FromBody]RebelParams rebel)
+        public IActionResult Update()
         {
             try
             {
-                if (rebel!=null)
                 {
-                    _rebelService.AddRebel(rebel);
+
+                    _rebelService.AddRebel();
                     _logger.LogInformation("Rebel Added to the system");
                     return Ok();
-                }
-                else
-                {
-                    _logger.LogError("Add the rebel properly");
-                    return NotFound();
                 }
                 
             }

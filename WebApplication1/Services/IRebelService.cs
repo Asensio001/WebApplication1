@@ -7,6 +7,6 @@ namespace WebApplication1.Services
     {
         public IEnumerable<Rebel> GetRebels();
         public string GetRebel(string rebel);
-        public void AddRebel(RebelParams rebel);
+        public void AddRebel();
     }
 }
