@@ -23,12 +23,12 @@ namespace WebApplication1.Services
 
         }
 
-        public string GetRebel(string rebel)
+        public Rebel GetRebel(string rebel)
         {
             try
             {
                 var json = JsonConvert.DeserializeObject<IEnumerable<Rebel>>(GetRepository("Data/RebelsRepository.json"));
-                return json.First(x => x.Name == rebel).Planet;
+                return json.First(x => x.Name == rebel);
             }
             catch (Exception ex)
             {
@@ -36,17 +36,17 @@ namespace WebApplication1.Services
             }
         }
 
-        public void AddRebel()
+        public void AddRebel(RebelParams rebel)
         {
             try
             {
                 var path = "Data/RebelsRepository.json";
                 var json = GetRepository(path);
                 var list = JsonConvert.DeserializeObject<List<Rebel>>(json);
-                list.Add(new Rebel("newRebel", "Earth"));
+                list.Add(new Rebel(rebel.Name, rebel.Planet));
 
                 var jsonToOutput = JsonConvert.SerializeObject(list, Formatting.Indented);
-                saveList(jsonToOutput,path);
+                SaveList(jsonToOutput,path);
 
 
             }
@@ -57,7 +57,22 @@ namespace WebApplication1.Services
 
         }
 
-        private void saveList(string jsonToOutput, string path)
+        public void UpdateRebel(RebelParams rebel)
+        {
+            var path = "Data/RebelsRepository.json";
+            var list = GetRebels(path);
+            var rebelUpdate = list.First(x => x.Name == rebel.Name);
+            if (rebelUpdate != null)
+            {
+                rebelUpdate.Name = rebel.Name;
+                rebelUpdate.Planet = rebel.Planet;
+                rebelUpdate.Date = DateTime.Now;
+            }
+            var jsonToOutput = JsonConvert.SerializeObject(list, Formatting.Indented);
+            SaveList(jsonToOutput, path);
+        }
+
+        private void SaveList(string jsonToOutput, string path)
         {
             System.IO.File.WriteAllText(path, jsonToOutput);
         }
@@ -66,6 +81,13 @@ namespace WebApplication1.Services
         {
             var filepath = Path.GetFullPath(path);
             return File.ReadAllText(filepath);
+        }
+
+        private List<Rebel> GetRebels(string path)
+        {
+            var filepath = Path.GetFullPath(path);
+            return JsonConvert.DeserializeObject<List<Rebel>>(File.ReadAllText(filepath));
+
         }
 
 
