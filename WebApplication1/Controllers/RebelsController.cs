@@ -65,11 +65,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update([FromBody]RebelParams rebel)
+        public IActionResult AddRebel([FromBody] RebelParams rebel)
         {
             try
             {
-                if (rebel!=null)
+                if(rebel!=null)
                 {
                     _rebelService.AddRebel(rebel);
                     _logger.LogInformation("Rebel Added to the system");
@@ -77,7 +77,6 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    _logger.LogError("Add the rebel properly");
                     return NotFound();
                 }
                 
@@ -90,10 +89,30 @@ namespace WebApplication1.Controllers
             return BadRequest("Failed to add the new rebel");
         }
 
-        private IActionResult NotRebelsFoundException()
+
+        [HttpPut]
+        public IActionResult Update([FromBody] RebelParams rebel)
         {
-            _logger.LogError("There are not Rebels on our system");
-            return NotFound();
+            try
+            {
+                if (rebel != null)
+                {
+                    _rebelService.UpdateRebel(rebel);
+                    _logger.LogInformation("Rebel Updated in the system");
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"Failed to update the rebel: {ex}");
+            }
+            return BadRequest("Failed to update the rebel");
         }
     }
 }

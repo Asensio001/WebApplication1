@@ -4,7 +4,7 @@ namespace WebApplication1
 {
     public class Rebel
     {
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         public string Name { get; set; }
         public string Planet { get; set; }
 
@@ -14,5 +14,6 @@ namespace WebApplication1
             this.Planet = Planet;
             this.Date = DateTime.Now;
         }
+
     }
 }
